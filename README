@@ -1,0 +1,12 @@
+ReacTvNode
+====================
+
+Configure your ReacTVision fiducials configuration sets with a simple NodeJS powered app.
+
+Install
+====================
+ * install NodeJS from here : http://nodejs.org
+ * download the projects archive
+ * run the project with
+ 
+node app.js
