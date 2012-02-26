@@ -1,0 +1,45 @@
+<div class="span9">
+  
+  <form action="/edit?set={active_set}">
+  	
+	<div class="controls">
+      <input type="text" class="input-xlarge" name="set_title" id="set_title" placeholder="Set title">
+
+	  <div style="float:right;">
+	    <button type="submit" class="btn btn-primary">Save changes</button>
+	    <button class="btn">Cancel</button>
+	  </div>
+	</div>
+
+	{if set_fiducials}
+	  <ul class="thumbnails">
+	  <li class="span3">
+	  	<!--
+	     <a href="#" class="thumbnail" title="fiducial {fid.id}">
+	        <img src="/assets/img/add_item.png" alt="fiducial {fid.id}" width="237" height="235">
+		    {for i in fid.icons}<i class="icon-{i}"></i>{/for}
+	     </a>
+	    -->
+	  </li>
+	  {for fid in set_fiducials}
+	    <li class="span3">
+	      <span style="float:right;padding: 15px;">{fid.id}</span>
+	      <span style="float:left;margin:5px;">
+	        {for i in fid.icons}<div class="btn"><i class="icon-{i}"></i></div><br/>{/for}
+	      </span>
+	      <a href="#" class="thumbnail" title="fiducial {fid.id}">
+	        <img src="/fiducials/{fid.id}.png" alt="fiducial {fid.id}">
+	      </a>
+	    </li>
+	  {/for}
+	  </ul>
+	{else}
+	  <p>No fiducials!</p>
+	{/if}
+	
+  </form>
+
+</div><!--/span-->
+
+<script src="../javascript/edit.js"></script>
+    
