@@ -6,7 +6,7 @@ Configure your ReacTVision fiducials configuration sets with a simple NodeJS pow
 Install
 ====================
  * install NodeJS from here : http://nodejs.org
- * download the projects archive
+ * download the project archive
  * run the project with
  
 node app.js

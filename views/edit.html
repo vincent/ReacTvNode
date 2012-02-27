@@ -1,13 +1,13 @@
 <div class="span9">
   
   <form action="/edit?set={active_set}">
+  	<input type="hidden" name="active_set" id="active_set" value="{active_set}"/>
   	
 	<div class="controls">
       <input type="text" class="input-xlarge" name="set_title" id="set_title" placeholder="Set title">
 
 	  <div style="float:right;">
-	    <button type="submit" class="btn btn-primary">Save changes</button>
-	    <button class="btn">Cancel</button>
+	    <button type="submit" class="btn btn-primary">Duplicate</button>
 	  </div>
 	</div>
 
@@ -22,10 +22,17 @@
 	    -->
 	  </li>
 	  {for fid in set_fiducials}
-	    <li class="span3">
-	      <span style="float:right;padding: 15px;">{fid.id}</span>
-	      <span style="float:left;margin:5px;">
-	        {for i in fid.icons}<div class="btn"><i class="icon-{i}"></i></div><br/>{/for}
+	    <li class="span3" id="fiducial_{fid.id}">
+	      <span class="number">{fid.id}</span>
+	      <span style="float:left;margin:5px;" class="types {for i in fid.types}{i} {/for}">
+			{for i in all_icons}
+	          <div class="btn icon-{i}" reactv-type="{i}">
+	          	<a href="#" rel="tooltip" title="first tooltip">
+	          	  <i class="icon-{i}"></i>
+	          	</a>
+	          </div>
+	          <br/>
+	        {/for}
 	      </span>
 	      <a href="#" class="thumbnail" title="fiducial {fid.id}">
 	        <img src="/fiducials/{fid.id}.png" alt="fiducial {fid.id}">

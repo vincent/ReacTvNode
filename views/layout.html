@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>ReacTVision configuration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -86,6 +86,20 @@
 		cursor: pointer;
 		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
       }
+      .thumbnails .number {
+      	float: right;
+      	padding: 15px;
+      	font-weight: bold;
+		font-size: 25px;
+      }
+      
+      
+      .types .btn { display: none; }
+      .types.knob .icon-refresh { display: inline; }
+      .types.note .icon-play-circle { display: inline; }
+      .types.hfader .icon-resize-horizontal { display: inline; }
+      .types.vfader .icon-resize-vertical { display: inline; }
+      
       
     </style>
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -119,9 +133,11 @@
 	          <li><a href="#contact">Contact</a></li>
 	        </ul>
 	
+			<!--
 			<button style="float:right;" class="btn zoom-minus" href="#"><i class="icon-zoom-in"></i> -</button>
 			<button style="float:right;" class="btn btn-primary zoom-plus" href="#"><i class="icon-zoom-out"></i> zoom</button>
-
+			-->
+			
 			<div class="btn-group" style="float:right; width:200px;">
 			  <a class="btn btn-danger" href="#">Reccording</a>
 			  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
