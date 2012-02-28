@@ -1,12 +1,12 @@
 <div class="span9">
   
-  <form action="/edit?set={active_set}">
+  <form id="editform" action="/edit?set={active_set}" method="get">
   	<input type="hidden" name="active_set" id="active_set" value="{active_set}"/>
   	
 	<div class="controls">
       <input type="text" class="input-xlarge" name="set_title" id="set_title" placeholder="Set title">
 
-	  <div style="float:right;">
+	  <div style="float:right; width: 125px;">
 	    <button type="submit" class="btn btn-primary">Duplicate</button>
 	  </div>
 	</div>
@@ -25,10 +25,10 @@
 	    <li class="span3" id="fiducial_{fid.id}">
 	      <span class="number">{fid.id}</span>
 	      <span style="float:left;margin:5px;" class="types {for i in fid.types}{i} {/for}">
-			{for i in all_icons}
-	          <div class="btn icon-{i}" reactv-type="{i}">
-	          	<a href="#" rel="tooltip" title="first tooltip">
-	          	  <i class="icon-{i}"></i>
+			{for c in fid.controls}
+	          <div class="btn icon-{c.icon}" reactv-type="{c.icon}">
+	          	<a href="#" rel="tooltip" data-original-title="{c.control}">
+	          	  <i class="icon-{c.icon}"></i>
 	          	</a>
 	          </div>
 	          <br/>

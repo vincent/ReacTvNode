@@ -3,6 +3,7 @@ $('.thumbnails li .types .btn').click(function(e){
 	e.preventDefault();
 	
 	var id = $(this).parents('li').filter(':first').attr('id').replace('fiducial_', '');
+	var active_set = $('#active_set').val();
 	
 	$.ajax('/action', {
 		data: {
@@ -11,7 +12,7 @@ $('.thumbnails li .types .btn').click(function(e){
 			toggle_type: $(this).attr('reactv-type')
 		},
 		success: function(){
-			window.location += '&t=' + Math.round(Math.random() * 1000);
+			$('<form id="editform" action="/edit" method="get"><input name="set" value="'+active_set+'"/></form>').submit();
 		}
 	});
 	

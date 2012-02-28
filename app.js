@@ -17,14 +17,31 @@ var all_types = {
 
 /**************************************************************************/
 
-Object.defineProperty(Object.prototype, "values", {
-    enumerable: false,
-    value: function(of) {
-    	return Object.keys(of).map(function(key) {
-    	  return of[key];
-		});
-    }
-});
+if (!Object['values']){
+	Object.defineProperty(Object.prototype, 'values', {
+	    enumerable: false,
+	    value: function(of) {
+	    	return Object.keys(of).map(function(key) {
+	    	  return of[key];
+			});
+	    }
+	});
+}
+
+if (!Object['exclude']){
+	Object.defineProperty(Object.prototype, 'exclude', {
+	    enumerable: false,
+	    value: function(from) {
+	      var newArray = [];
+	      this.forEach(function(key){
+	    	 if (from.indexOf(key) == -1){
+	    	   newArray.push(key);
+	    	 }
+	      });
+	      return newArray;
+	    }
+	});
+}
 
 /**************************************************************************/
 
@@ -34,6 +51,8 @@ var express = require('express');
 var jsdom = require('jsdom');
 var async = require('async');
 var fs = require('fs');
+var R = require('./node_modules/reactvision.js');
+var spawn = require('child_process').spawn;
 
 var app = express.createServer();
 
@@ -59,7 +78,10 @@ app.configure(function(){
  */
 function sets_list_html(sets, active_set){
 	return sets.map(function(set){
-		return '<li class="' + (active_set == set ? 'active' : '') + '"><a href="/edit?set=' + set + '">' + set + '</a></li>';
+		return '<li class="' + (active_set == set ? 'active' : '') + '">'
+				+ '<a class="set_name" href="/edit?set=' + set + '">' + set + '</a>'
+				+ '<a class="set_duplicate" id="duplicate_'+ set +'" href="#"><i class="icon-tags"></i></a>'
+			 + '</li>';
 	});
 }
 
@@ -93,51 +115,20 @@ function readMidiConfigFile(set, callback){
 	
 	fs.readFile(filepath, 'utf8', function(err, contents){
 		
-		// walk in fiducials as dom
-		jsdom.env(contents, [
-          'http://127.0.0.1:8888/assets/js/jquery.js'
-          ],
-          function(errors, window) {
-
-            var xml_fiducials = window.$("map");
-
-            // context's fiducials
-            var set_fiducials = [];
-            
-            xml_fiducials.each(function(index, fid){
-            	var fid = window.$(fid);
-            	
-            	fid.id = fid.attr('fiducial');
-            	fid.type = fid.attr('type');
-                fid.icon = all_icons[fid.type];
-            	fid.control = fid.attr('control') || fid.attr('note');
-
-            	/* * /
-                console.log("found fiducial: ", {
-    				id: fid.id,
-    				types: [ fid.type ],
-    				control: fid.control
-        		});
-        		/* */
-                
-            	if (set_fiducials[fid.id]){
-            		set_fiducials[fid.id].types.push(fid.type);
-            		set_fiducials[fid.id].icons.push(fid.icon);
-            		set_fiducials[fid.id].controls[fid.type] = fid.control;
-            	} else {
-            		var controls = {};
-            		controls[fid.type] = fid.control;
-            		set_fiducials[fid.id] = {
-        				id: fid.id,
-        				icons: [ fid.icon ],
-        				types: [ fid.type ],
-        				controls: controls
-            		};
-            	}
-            });
-            
-        	callback(set_fiducials);
+		// parse file contents
+		var midiParser = new R.MidiConfigFileParser();
+		var set_fiducials = midiParser.run(contents, {
+			all_icons: all_icons,
+			all_types: all_types,
+			default_types: {
+				'vfader': { enabled: false, type: 'vfader', icon: 'resize-vertical'   },
+				'hfader': { enabled: false, type: 'hfader', icon: 'resize-horizontal' },
+				'knob'  : { enabled: false, type: 'knob',   icon: 'refresh'           },
+				'note'  : { enabled: false, type: 'note',   icon: 'play-circle'       }
+			}
 		});
+
+    	callback(set_fiducials);
 	});
 }
 
@@ -177,14 +168,16 @@ function writeMidiConfigFile(set, set_fiducials, callback){
 	
 	Object.values(set_fiducials).forEach(function(fiducial){
 
-		fiducial.types.forEach(function(type){
-			if (type == 'note'){
-				contents += '		<map fiducial="'+fiducial.id+'" type="'+type+'" note="'+fiducial.controls[type]+'" />	\n\
+		fiducial.controls.forEach(function(control){
+			if (control.enabled) {
+				if (control.type == 'note'){
+					contents += '		<map fiducial="'+fiducial.id+'" type="'+control.type+'" note="'+control.control+'" />						\n\
 ';
-				
-			} else {
-				contents += '		<map fiducial="'+fiducial.id+'" type="'+type+'" control="'+fiducial.controls[type]+'" min="0.1" max="0.9"/>	\n\
+					
+				} else {
+					contents += '		<map fiducial="'+fiducial.id+'" type="'+control.type+'" control="'+control.control+'" min="0.1" max="0.9"/>	\n\
 ';
+				}
 			}
 		});
 	});
@@ -196,13 +189,14 @@ function writeMidiConfigFile(set, set_fiducials, callback){
 	var filepath = __dirname + '/sets/' + set;
 	fs.writeFile(filepath, contents, 'utf8', function(err){
 		console.log('wrote file [', filepath, ']');
-		console.log(set_fiducials);
-		console.log(contents);
+		//console.log(set_fiducials);
+		//console.log(contents);
 		callback();
 	});
 }
 
 /**************************************************************************/
+
 /* index */
 app.get('/', function(req, res){
 	var C = context(req);
@@ -214,11 +208,10 @@ app.get('/edit', function(req, res){
 	var C = context(req);
 	
 	readMidiConfigFile(C.active_set, function(set_fiducials){
-        C.set_fiducials = set_fiducials;
-        C.all_icons = Object.values(all_icons);
+		C.set_fiducials = Object.values(set_fiducials);
+		C.all_icons = Object.values(all_icons);
 
-        console.log("CONTEXT: ", C);
-
+        //console.log("CONTEXT: ", C);
         res.render('edit.html', C);
 	});
 });
@@ -234,36 +227,76 @@ app.get('/action', function(req, res){
 		var toggle_type = all_types[req.param('toggle_type')];
 		
 		readMidiConfigFile(C.active_set, function(set_fiducials){
+			
 			if (set_fiducials[fid_id]){
-				console.log('fiducial #', fid_id, 
+				console.log(
+						'toogle ', toggle_type_icon, ' of ',
+						' fiducial #', fid_id, 
 						' current types are ', set_fiducials[fid_id].types,
 						' current icons are ', set_fiducials[fid_id].icons);
 				
 				// fiducial already has this type
         		if (set_fiducials[fid_id].icons.indexOf(toggle_type_icon) > -1){
         			// remove it
-    				console.log('remove type [', toggle_type, ' (', toggle_type_icon, ')] of fiducial #', fid_id);
-            		set_fiducials[fid_id].types = [];
+    				// console.log('remove type [', toggle_type, ' (', toggle_type_icon, ')] of fiducial #', fid_id);
+    				
+    				Object.keys(set_fiducials[fid_id].controls).forEach(function(key){
+              		  if (set_fiducials[fid_id].controls[key].type == toggle_type){
+                  		set_fiducials[fid_id].controls[key].enabled = false;
+              		  }
+              		});
         		}
         		// fiducial does not have this type
         		else {
         			// add it
-    				console.log('add type [', toggle_type, ' (', toggle_type_icon, ')] to fiducial #', fid_id);
-            		set_fiducials[fid_id].icons.push(toggle_type_icon);
-            		set_fiducials[fid_id].types.push(toggle_type);
-            		set_fiducials[fid_id].controls[toggle_type] = 999;
+    				// console.log('add type [', toggle_type, ' (', toggle_type_icon, ')] to fiducial #', fid_id);
+            		
+            		Object.keys(set_fiducials[fid_id].controls).forEach(function(key){
+            		  if (set_fiducials[fid_id].controls[key].type == toggle_type){
+            			set_fiducials[fid_id].controls[key] = { enabled: true, control: 9, type: toggle_type };
+            		  }
+            		});
         		}
         	}
 
         	// write the file
-			console.log('update set [', C.active_set, ']');
+			// console.log('update set [', C.active_set, ']');
         	writeMidiConfigFile(C.active_set, set_fiducials, function(){
         		res.end();
         	});
 		});
 		
 	}
-	
+
+	// stop
+	if (req.param('stop', false)){
+		if (os.platform() == 'windows'){
+			spawn('TASKKILL /F /IM reactvision.exe');
+		} else {
+			spawn('killall -9 reactvision');
+		}
+	}
+
+	// start
+	if (req.param('stop', false)){
+		if (os.platform() == 'windows'){
+			spawn('reactvision.exe');
+		} else {
+			spawn('reactvision');
+		}
+	}
+
+	// restart
+	if (req.param('restart', false)){
+		if (os.platform() == 'windows'){
+			spawn('TASKKILL /F /IM reactvision.exe');
+			spawn('reactvision.exe');
+		} else {
+			spawn('killall -9 reactvision');
+			spawn('reactvision');
+		}
+	}
+
 	// other possible actions ..
 	else if (false){
 		

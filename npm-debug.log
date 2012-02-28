@@ -1,0 +1,48 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'cloneextend' ]
+info using npm@1.1.2
+info using node@v0.6.11
+verbose config file /Users/vincent/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose caching /Users/vincent/Workspace/reactnode/node_modules/async/package.json
+verbose loadDefaults async@0.1.16
+verbose caching /Users/vincent/Workspace/reactnode/node_modules/express/package.json
+verbose loadDefaults express@2.5.8
+verbose caching /Users/vincent/Workspace/reactnode/node_modules/jsdom/package.json
+verbose loadDefaults jsdom@0.2.12
+verbose caching /Users/vincent/Workspace/reactnode/node_modules/whiskers/package.json
+verbose loadDefaults whiskers@0.1.5
+verbose cache add [ 'cloneextend', null ]
+silly cache add: name, spec, args [ undefined, 'cloneextend', [ 'cloneextend', null ] ]
+verbose parsed url { pathname: 'cloneextend',
+verbose parsed url   path: 'cloneextend',
+verbose parsed url   href: 'cloneextend' }
+verbose addNamed [ 'cloneextend', '' ]
+verbose addNamed [ null, '' ]
+silly name, range, hasData [ 'cloneextend', '', false ]
+verbose raw, before any munging cloneextend
+verbose url resolving [ 'https://registry.npmjs.org/', './cloneextend' ]
+verbose url resolved https://registry.npmjs.org/cloneextend
+http GET https://registry.npmjs.org/cloneextend
+http 404 https://registry.npmjs.org/cloneextend
+silly get cb [ 404,
+silly get cb   { server: 'CouchDB/1.1.0 (Erlang OTP/R14B04)',
+silly get cb     date: 'Tue, 28 Feb 2012 03:34:26 GMT',
+silly get cb     'content-type': 'application/json',
+silly get cb     'content-length': '52',
+silly get cb     'cache-control': 'must-revalidate' } ]
+ERR! 404 'cloneextend' is not in the npm registry.
+ERR! 404 You should bug the author to publish it
+ERR! 404 Note that you can also install from a
+ERR! 404 tarball, folder, or http url, or git url.
+ERR! 
+ERR! System Darwin 10.7.4
+ERR! command "node" "/usr/local/bin/npm" "install" "cloneextend"
+ERR! cwd /Users/vincent/Workspace/reactnode
+ERR! node -v v0.6.11
+ERR! npm -v 1.1.2
+ERR! code E404
+ERR! message 404 Not Found: cloneextend
+ERR! errno {}
+verbose exit [ 1, true ]

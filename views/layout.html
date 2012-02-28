@@ -19,6 +19,21 @@
       .sidebar-nav {
         padding: 9px 0;
       }
+
+      .sidebar-nav .set_name {
+      	clear: both;
+      	float: left;
+      	width: 85%;
+      }
+      
+      .sidebar-nav li > a.set_duplicate:hover {
+      	background-color: transparent;
+	  }
+
+      .sidebar-nav .set_duplicate {
+      	float: right;
+      	width: 5%;
+      }
       
       /* #set_title */
       #set_title {
@@ -48,14 +63,15 @@
       	float: left;
       }
       ul.thumbnails li .btn {
-		padding: 3px;
-		margin-top: 1px;
-		border: none;
+      	margin-top: 1px;
+      	border-color: transparent;
 		background-color: transparent;
 		background-image: none;
       }
       ul.thumbnails li:hover .btn {
-        display: inline-block;
+        padding: 3px;
+        visibility: visible;
+		display: inline-block;
 		margin-bottom: 0;
 		font-size: 13px;
 		line-height: 18px;
@@ -94,11 +110,11 @@
       }
       
       
-      .types .btn { display: none; }
-      .types.knob .icon-refresh { display: inline; }
-      .types.note .icon-play-circle { display: inline; }
-      .types.hfader .icon-resize-horizontal { display: inline; }
-      .types.vfader .icon-resize-vertical { display: inline; }
+      .types .btn { visibility: hidden; padding: 3px; }
+      .types.knob .icon-refresh { visibility: visible; }
+      .types.note .icon-play-circle { visibility: visible; }
+      .types.hfader .icon-resize-horizontal { visibility: visible; }
+      .types.vfader .icon-resize-vertical { visibility: visible; }
       
       
     </style>
@@ -138,7 +154,7 @@
 			<button style="float:right;" class="btn btn-primary zoom-plus" href="#"><i class="icon-zoom-out"></i> zoom</button>
 			-->
 			
-			<div class="btn-group" style="float:right; width:200px;">
+			<div class="btn-group" style="float:right; width: 160px;">
 			  <a class="btn btn-danger" href="#">Reccording</a>
 			  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 			    <span class="caret"></span>
@@ -167,6 +183,7 @@
 			  {else}
 			    <p>No sets!</p>
 			  {/if}
+			  <li style="clear:both;">&nbsp;</li>
 	        </ul>
 	      </div><!--/.well -->
 	    </div><!--/span-->
@@ -199,6 +216,10 @@
     <script src="../assets/js/bootstrap-collapse.js"></script>
     <script src="../assets/js/bootstrap-carousel.js"></script>
     <script src="../assets/js/bootstrap-typeahead.js"></script>
+
+	<script type="text/javascript">
+		$('[rel="tooltip"]').tooltip();
+	</script>
 
   </body>
 </html>

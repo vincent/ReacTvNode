@@ -25,23 +25,19 @@
 	-->																						
 																							
 	<midi device="1">																		
-		<map fiducial="2" type="vfader" control="2" min="0.1" max="0.9"/>	
-		<map fiducial="3" type="vfader" control="3" min="0.1" max="0.9"/>	
-		<map fiducial="4" type="hfader" control="4" min="0.1" max="0.9"/>	
-		<map fiducial="4" type="knob" control="999" min="0.1" max="0.9"/>	
-		<map fiducial="4" type="vfader" control="999" min="0.1" max="0.9"/>	
-		<map fiducial="5" type="knob" control="5" min="0.1" max="0.9"/>	
-		<map fiducial="5" type="vfader" control="999" min="0.1" max="0.9"/>	
-		<map fiducial="5" type="hfader" control="999" min="0.1" max="0.9"/>	
-		<map fiducial="5" type="note" note="999" />	
-		<map fiducial="6" type="knob" control="6" min="0.1" max="0.9"/>	
-		<map fiducial="7" type="knob" control="7" min="0.1" max="0.9"/>	
-		<map fiducial="8" type="knob" control="8" min="0.1" max="0.9"/>	
+		<map fiducial="2" type="vfader" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="2" type="hfader" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="2" type="note" note="9" />						
+		<map fiducial="3" type="vfader" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="3" type="knob" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="3" type="note" note="9" />						
+		<map fiducial="6" type="knob" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="7" type="vfader" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="7" type="knob" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="8" type="vfader" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="8" type="knob" control="9" min="0.1" max="0.9"/>	
+		<map fiducial="9" type="vfader" control="9" min="0.1" max="0.9"/>	
 		<map fiducial="9" type="knob" control="9" min="0.1" max="0.9"/>	
-		<map fiducial="10" type="knob" control="10" min="0.1" max="0.9"/>	
-		<map fiducial="11" type="hfader" control="11" min="0.1" max="0.9"/>	
-		<map fiducial="11" type="vfader" control="12" min="0.1" max="0.9"/>	
-		<map fiducial="11" type="knob" control="13" min="0.1" max="0.9"/>	
-		<map fiducial="11" type="note" note="70" />	
+		<map fiducial="10" type="knob" control="9" min="0.1" max="0.9"/>	
 
 	</midi>
