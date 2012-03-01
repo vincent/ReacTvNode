@@ -1,6 +1,9 @@
-var config = {
-	sets_directory: __dirname+'/sets'
-};
+// Configuration
+var nconf = require('nconf');
+nconf.file({ file: 'config.json' })
+	 .defaults({
+		 sets_directory: __dirname + '/sets'
+	 });
 
 var all_icons = {
 		'vfader':'resize-vertical',
@@ -51,8 +54,11 @@ var express = require('express');
 var jsdom = require('jsdom');
 var async = require('async');
 var fs = require('fs');
+var os = require('os');
 var R = require('./node_modules/reactvision.js');
-var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
+
+/**************************************************************************/
 
 var app = express.createServer();
 
@@ -71,6 +77,10 @@ app.configure(function(){
 });
 
 /**************************************************************************/
+
+/**
+ * 
+ */
 
 /**
  * sets_list_html
@@ -92,7 +102,7 @@ function sets_list_html(sets, active_set){
 function context(req){
 	
 	// user sets
-	var user_sets = fs.readdirSync(config.sets_directory);
+	var user_sets = fs.readdirSync(nconf.get('sets_directory'));
 	
 	// active set
 	var active_set = req.param('set', false);
@@ -101,6 +111,7 @@ function context(req){
 	var user_sets_html = sets_list_html(user_sets, active_set);
 
 	return {
+		config: nconf.load(),
 		user_sets: user_sets,
 		user_sets_html: user_sets_html.join(''),
 		active_set: active_set
@@ -111,7 +122,7 @@ function context(req){
  * readMidiConfigFile
  */
 function readMidiConfigFile(set, callback){
-	var filepath = __dirname + '/sets/' + set;
+	var filepath = nconf.get('sets_directory') + '/' + set;
 	
 	fs.readFile(filepath, 'utf8', function(err, contents){
 		
@@ -186,7 +197,7 @@ function writeMidiConfigFile(set, set_fiducials, callback){
 	contents += '\n\
 	</midi>';
 	
-	var filepath = __dirname + '/sets/' + set;
+	var filepath = nconf.get('sets_directory') + '/' + set;
 	fs.writeFile(filepath, contents, 'utf8', function(err){
 		console.log('wrote file [', filepath, ']');
 		//console.log(set_fiducials);
@@ -208,6 +219,16 @@ app.get('/edit', function(req, res){
 	var C = context(req);
 	
 	readMidiConfigFile(C.active_set, function(set_fiducials){
+		C.disabled_fiducials = [];
+		var arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
+		           31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60];
+		arr.forEach(function(i){
+        	if (!set_fiducials[i]){
+        		C.disabled_fiducials.push({
+        			id: i
+        		});
+        	}
+        });
 		C.set_fiducials = Object.values(set_fiducials);
 		C.all_icons = Object.values(all_icons);
 
@@ -271,29 +292,29 @@ app.get('/action', function(req, res){
 	// stop
 	if (req.param('stop', false)){
 		if (os.platform() == 'windows'){
-			spawn('TASKKILL /F /IM reactvision.exe');
+			exec('TASKKILL /F /IM reactvision.exe');
 		} else {
-			spawn('killall -9 reactvision');
+			exec('killall -9 reactvision &');
 		}
 	}
 
 	// start
 	if (req.param('stop', false)){
 		if (os.platform() == 'windows'){
-			spawn('reactvision.exe');
+			exec('reactvision.exe');
 		} else {
-			spawn('reactvision');
+			exec('reactvision &');
 		}
 	}
 
 	// restart
 	if (req.param('restart', false)){
 		if (os.platform() == 'windows'){
-			spawn('TASKKILL /F /IM reactvision.exe');
-			spawn('reactvision.exe');
+			exec('TASKKILL /F /IM reactvision.exe');
+			exec('reactvision.exe');
 		} else {
-			spawn('killall -9 reactvision');
-			spawn('reactvision');
+			exec('killall -9 reactvision &');
+			exec('reactvision &');
 		}
 	}
 
@@ -303,12 +324,36 @@ app.get('/action', function(req, res){
 	}
 	
 	// no valid action found
-	else {
-		res.end('0');
-	}
+	res.redirect('/');
 });
 
+/* config */
+app.get('/config', function(req, res){
+	var C = context(req);
+	res.render('config.html', C);
+});
 
+/* config (post) */
+app.post('/config', function(req, res){
+	var C = context(req);
+	var config_changed = false;
+
+	Object.keys(C.config).forEach(function(item){
+		var new_value = req.param('config.'+item, -1);
+		
+		if (new_value != -1){
+			nconf.set(item, new_value);
+			config_changed = true;
+		}
+	});
+	
+	if (config_changed){
+		nconf.save(function (err) {
+		});
+	}
+	
+	res.redirect('/');
+});
 
 
 

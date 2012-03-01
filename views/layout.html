@@ -56,6 +56,9 @@
       ul.thumbnails li {
         width: 205px;
       }
+      ul.thumbnails li.disabled {
+      	opacity: .3;
+      }
       ul.thumbnails img {
       	zoom: .4;
       }
@@ -141,12 +144,11 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </a>
-	      <a class="brand" href="#">ReacTVision config</a>
+	      <a class="brand" href="/">ReacTVision patterns</a>
 	      <div class="nav-collapse">
 	        <ul class="nav">
-	          <li class="active"><a href="#">Home</a></li>
-	          <li><a href="#about">About</a></li>
-	          <li><a href="#contact">Contact</a></li>
+	          <li class="active"><a href="/">Home</a></li>
+	          <li><a href="/config">Configuration</a></li>
 	        </ul>
 	
 			<!--
@@ -160,10 +162,10 @@
 			    <span class="caret"></span>
 			  </a>
 					<ul class="dropdown-menu">
-	                  <li><a href="#"><i class="icon-repeat"></i> Restart</a></li>
-	                  <li><a href="#"><i class="icon-minus-sign"></i> Stop</a></li>
+	                  <li><a href="/action?restart=1"><i class="icon-repeat"></i> Restart</a></li>
+	                  <li><a href="/action?stop=1"><i class="icon-minus-sign"></i> Stop</a></li>
 	                  <li class="divider"></li>
-	                  <li><a href="#"><i class="icon-off"></i> Quit</a></li>
+	                  <li><a href="/action?stop=1"><i class="icon-off"></i> Quit</a></li>
 	                </ul>
 			</div>
 
@@ -177,7 +179,7 @@
 	    <div class="span3">
 	      <div class="well sidebar-nav">
 	        <ul class="nav nav-list">
-	          <li class="nav-header">Sidebar</li>
+	          <li class="nav-header">Your sets<br/><em style="font-size:8px; letter-spacing: .8px">in {config.sets_directory}</em></li>
 			  {if user_sets_html}
 			  	{user_sets_html}
 			  {else}

@@ -3,14 +3,6 @@
   <form id="editform" action="/edit?set={active_set}" method="get">
   	<input type="hidden" name="active_set" id="active_set" value="{active_set}"/>
   	
-	<div class="controls">
-      <input type="text" class="input-xlarge" name="set_title" id="set_title" placeholder="Set title">
-
-	  <div style="float:right; width: 125px;">
-	    <button type="submit" class="btn btn-primary">Duplicate</button>
-	  </div>
-	</div>
-
 	{if set_fiducials}
 	  <ul class="thumbnails">
 	  <li class="span3">
@@ -39,6 +31,24 @@
 	      </a>
 	    </li>
 	  {/for}
+	  {for dis in disabled_fiducials}
+	    <li class="span3 disabled" id="fiducial_{dis}">
+	      <span class="number">{dis.id}</span>
+	      <span style="float:left;margin:5px;" class="types">
+			{for c in fid.controls}
+	          <div class="btn icon-{c.icon}" reactv-type="{c.icon}">
+	          	<a href="#">
+	          	  <i class="icon-{c.icon}"></i>
+	          	</a>
+	          </div>
+	          <br/>
+	        {/for}
+	      </span>
+	      <a href="#" class="thumbnail" title="fiducial {dis.id}">
+	        <img src="/fiducials/{dis.id}.png" alt="fiducial {dis.id}">
+	      </a>
+	    </li>
+      {/for}
 	  </ul>
 	{else}
 	  <p>No fiducials!</p>
