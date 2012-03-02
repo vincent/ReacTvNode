@@ -235,10 +235,13 @@ app.get('/edit', function(req, res){
 		arr.forEach(function(i){
         	if (!set_fiducials[i]){
         		C.disabled_fiducials.push({
-        			id: i
+        			id: i+''
         		});
         	}
         });
+		
+		console.log(C.disabled_fiducials);
+		
 		C.set_fiducials = Object.values(set_fiducials);
 		C.all_icons = Object.values(all_icons);
 
