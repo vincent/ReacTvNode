@@ -323,7 +323,7 @@ app.get('/action', function(req, res){
 
 	// stop
 	if (req.param('stop', false)){
-		if (os.platform() == 'windows'){
+		if (os.platform() == 'win32'){
 			console.log(exec('TASKKILL /F /IM reacTIVision.exe'));
 		} else {
 			console.log(exec('killall -9 reactvision &'));
@@ -334,7 +334,7 @@ app.get('/action', function(req, res){
 	// start
 	if (req.param('stop', false)){
 		var rpath = path.basename(nconf.get('reactivisionxml'));
-		if (os.platform() == 'windows'){
+		if (os.platform() == 'win32'){
 			console.log(exec(rpath + '/reacTIVision.exe'));
 		} else {
 			console.log(exec(rpath + '/reactvision &'));
@@ -345,7 +345,7 @@ app.get('/action', function(req, res){
 	// restart
 	if (req.param('restart', false)){
 		var rpath = path.basename(nconf.get('reactivisionxml'));
-		if (os.platform() == 'windows'){
+		if (os.platform() == 'win32'){
 			console.log(exec('TASKKILL /F /IM reacTIVision.exe'));
 			console.log(exec(rpath + 'reacTIVision.exe'));
 		} else {
