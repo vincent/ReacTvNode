@@ -115,7 +115,7 @@ function context(req){
 
 	return {
 		platform: {
-			is_windows: plateform == "windows",
+			is_windows: plateform == "win32",
 			is_linux: plateform == "linux",
 			is_macos: plateform == "darwin"
 		},
