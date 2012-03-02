@@ -339,7 +339,7 @@ app.get('/action', function(req, res){
 		var rpath = path.dirname(nconf.get('reactivisionxml'));
 		var startcmd;
 		if (os.platform() == 'win32'){
-			startcmd = 'START ' + rpath + '\reacTIVision.exe';
+			startcmd = 'START ' + rpath + '\\reacTIVision.exe';
 		} else {
 			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
 		}
@@ -353,7 +353,7 @@ app.get('/action', function(req, res){
 		var stopcmd, startcmd;
 		if (os.platform() == 'win32'){
 			stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
-			startcmd = 'START ' + rpath + '\reacTIVision.exe';
+			startcmd = 'START ' + rpath + '\\reacTIVision.exe';
 		} else {
 			stopcmd = 'killall reacTIVision';
 			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
