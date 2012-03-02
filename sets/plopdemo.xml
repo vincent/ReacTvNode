@@ -27,7 +27,6 @@
 	<midi device="1">																		
 		<map fiducial="2" type="vfader" control="9" min="0.1" max="0.9"/>	
 		<map fiducial="2" type="hfader" control="9" min="0.1" max="0.9"/>	
-		<map fiducial="2" type="note" note="9" />						
 		<map fiducial="3" type="vfader" control="9" min="0.1" max="0.9"/>	
 		<map fiducial="3" type="knob" control="9" min="0.1" max="0.9"/>	
 		<map fiducial="3" type="note" note="9" />						
