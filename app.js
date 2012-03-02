@@ -240,8 +240,6 @@ app.get('/edit', function(req, res){
         	}
         });
 		
-		console.log(C.disabled_fiducials);
-		
 		C.set_fiducials = Object.values(set_fiducials);
 		C.all_icons = Object.values(all_icons);
 
@@ -335,22 +333,24 @@ app.get('/action', function(req, res){
 
 	// start
 	if (req.param('stop', false)){
+		var rpath = path.basename(nconf.get('reactivisionxml'));
 		if (os.platform() == 'windows'){
-			console.log(exec('reactvision.exe'));
+			console.log(exec(rpath + '/reactvision.exe'));
 		} else {
-			console.log(exec('reactvision &'));
+			console.log(exec(rpath + '/reactvision &'));
 		}
 		res.end();
 	}
 
 	// restart
 	if (req.param('restart', false)){
+		var rpath = path.basename(nconf.get('reactivisionxml'));
 		if (os.platform() == 'windows'){
 			console.log(exec('TASKKILL /F /IM reactvision.exe'));
-			console.log(exec('reactvision.exe'));
+			console.log(exec(rpath + 'reactvision.exe'));
 		} else {
 			console.log(exec('killall -9 reactvision &'));
-			console.log(exec('reactvision &'));
+			console.log(exec(rpath + 'reactvision &'));
 		}
 		res.end();
 	}
