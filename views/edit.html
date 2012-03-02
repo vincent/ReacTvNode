@@ -39,7 +39,7 @@
 	    </li>
 	  {/for}
 	  {for dis in disabled_fiducials}
-	    <li class="span3 disabled" id="fiducial_{dis}">
+	    <li class="span3 disabled" id="fiducial_{dis.id}">
 	      <span class="number">{dis.id}</span>
 	      <span style="float:left;margin:5px;" class="types">
 			{for c in fid.controls}
