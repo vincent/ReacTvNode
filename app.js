@@ -371,20 +371,21 @@ app.get('/action', function(req, res){
 			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
 		}
 		console.log(stopcmd);
-		console.log(startcmd);
 		exec(stopcmd, function (error, stdout, stderr) {
 		    console.log('stdout: ' + stdout);
 		    console.log('stderr: ' + stderr);
 		    if (error !== null) {
 		      console.log('exec error: ' + error);
 		    };
-		});
-		exec(startcmd, function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    };
+		    
+			console.log(startcmd);
+			exec(startcmd, function (error, stdout, stderr) {
+			    console.log('stdout: ' + stdout);
+			    console.log('stderr: ' + stderr);
+			    if (error !== null) {
+			      console.log('exec error: ' + error);
+			    };
+			});
 		});
 	}
 
