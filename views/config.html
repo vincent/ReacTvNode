@@ -1,12 +1,31 @@
-<div class="span9">
+<div class="span9" style="margin-left: 26%;">
   <form class="form-horizontal" method="post">
 	<fieldset>
 	  <legend>Configuration panel</legend>
 	  <div class="control-group">
 	    <label class="control-label" for="input01">Sets directory</label>
 	    <div class="controls">
-	      <input type="text" class="input-xlarge" id="input01" name="config.sets_directory" value="{config.sets_directory}">
 	      <p class="help-block">Where are your patterns XML files ?</p>
+	      <input type="text" class="input-xlarge" id="input01" name="config.sets_directory" value="{config.sets_directory}">
+	    </div>
+	  </div>
+	  <div class="control-group">
+	    <label class="control-label" for="input01">ReacTIVision</label>
+	    <div class="controls">
+	      <p class="help-block">Where is <i>reacTIVision.xml</i> ?</p>
+	      <input type="text" class="input-xlarge" id="input02" name="config.reactivisionxml" value="{config.reactivisionxml}" ondrop="console.log(event);">
+	      {if platform.is_windows}
+	        <input type="hidden" name="config.platform" value="windows" />
+	        <p class="help-block">Usually, it resides beside the <em>reacTIVision.exe</em> program</p>
+	      {/if}
+	      {if platform.is_macos}
+	        <input type="hidden" name="config.platform" value="macos" />
+	        <p class="help-block">Usually, it resides on <em>.../reacTIVision.app/Contents/Resources/reacTIVision.xml</em></p>
+	      {/if}
+	      {if platform.is_linux}
+	        <input type="hidden" name="config.platform" value="linux" />
+	        <p class="help-block">Usually, it resides beside the reacTIVision program</em></p>
+	      {/if}
 	    </div>
 	  </div>
 	  <div class="form-actions">

@@ -1,18 +1,25 @@
-<div class="span9">
+<div class="span9" style="margin-left: 26%;">
   
   <form id="editform" action="/edit?set={active_set}" method="get">
   	<input type="hidden" name="active_set" id="active_set" value="{active_set}"/>
   	
+	<div class="controls clearfix page-header" style="margin-top:0px;">
+
+	  <h1>{active_set}</h1>
+	  <br/>
+	  
+	  <div style="float:left; width: 160px;">
+	    <a href="/action?activate=1&set={active_set}" class="btn btn-primary btn-success"><i class="icon-white icon-ok-circle"></i> Make it active</a>
+	  </div>
+	  
+	  <div style="float:left; width: 120px;">
+	    <button type="submit" class="btn btn-primary btn-danger"><i class="icon-white icon-ban-circle"></i> Delete</button>
+	  </div>
+	  
+	</div>
+
 	{if set_fiducials}
-	  <ul class="thumbnails">
-	  <li class="span3">
-	  	<!--
-	     <a href="#" class="thumbnail" title="fiducial {fid.id}">
-	        <img src="/assets/img/add_item.png" alt="fiducial {fid.id}" width="237" height="235">
-		    {for i in fid.icons}<i class="icon-{i}"></i>{/for}
-	     </a>
-	    -->
-	  </li>
+	<ul class="thumbnails">
 	  {for fid in set_fiducials}
 	    <li class="span3" id="fiducial_{fid.id}">
 	      <span class="number">{fid.id}</span>

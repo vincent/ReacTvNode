@@ -2,7 +2,8 @@
 var nconf = require('nconf');
 nconf.file({ file: 'config.json' })
 	 .defaults({
-		 sets_directory: __dirname + '/sets'
+		 sets_directory: __dirname + '/sets',
+		 reactivisionxml: false
 	 });
 
 var all_icons = {
@@ -109,8 +110,15 @@ function context(req){
 	
 	// all sets
 	var user_sets_html = sets_list_html(user_sets, active_set);
+	
+	var plateform = os.platform();
 
 	return {
+		platform: {
+			is_windows: plateform == "windows",
+			is_linux: plateform == "linux",
+			is_macos: plateform == "darwin"
+		},
 		config: nconf.load(),
 		user_sets: user_sets,
 		user_sets_html: user_sets_html.join(''),
@@ -288,34 +296,58 @@ app.get('/action', function(req, res){
 		});
 		
 	}
+	
+	// activate
+	if (req.param('activate', false)){
+		if (req.param('set', false)){
+			// reactivisionxml
+
+			var filepath = nconf.get('reactivisionxml');
+			
+			fs.readFile(filepath, 'utf8', function(err, contents){
+				var reacParser = new R.ReacTIVisionConfigFileParser();
+				reacParser.run(contents);
+				reacParser.modify('MIDI', { config: nconf.get('sets_directory') + '/' + req.param('set') });
+				
+				contents = reacParser.newContents();
+
+				fs.writeFile(filepath, contents, 'utf8', function(err){
+					res.end();
+				});
+			});
+		}
+	}
 
 	// stop
 	if (req.param('stop', false)){
 		if (os.platform() == 'windows'){
-			exec('TASKKILL /F /IM reactvision.exe');
+			console.log(exec('TASKKILL /F /IM reactvision.exe'));
 		} else {
-			exec('killall -9 reactvision &');
+			console.log(exec('killall -9 reactvision &'));
 		}
+		res.end();
 	}
 
 	// start
 	if (req.param('stop', false)){
 		if (os.platform() == 'windows'){
-			exec('reactvision.exe');
+			console.log(exec('reactvision.exe'));
 		} else {
-			exec('reactvision &');
+			console.log(exec('reactvision &'));
 		}
+		res.end();
 	}
 
 	// restart
 	if (req.param('restart', false)){
 		if (os.platform() == 'windows'){
-			exec('TASKKILL /F /IM reactvision.exe');
-			exec('reactvision.exe');
+			console.log(exec('TASKKILL /F /IM reactvision.exe'));
+			console.log(exec('reactvision.exe'));
 		} else {
-			exec('killall -9 reactvision &');
-			exec('reactvision &');
+			console.log(exec('killall -9 reactvision &'));
+			console.log(exec('reactvision &'));
 		}
+		res.end();
 	}
 
 	// other possible actions ..
