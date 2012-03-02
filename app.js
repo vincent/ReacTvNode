@@ -1,6 +1,6 @@
 // Configuration
 var nconf = require('nconf');
-nconf.file({ file: 'config.json' })
+nconf.file({ file: __dirname + '/config.json' })
 	 .defaults({
 		 sets_directory: __dirname + '/sets',
 		 reactivisionxml: false
@@ -55,6 +55,7 @@ var express = require('express');
 var jsdom = require('jsdom');
 var async = require('async');
 var fs = require('fs');
+var path = require('path');
 var os = require('os');
 var R = require('./node_modules/reactvision.js');
 var exec = require('child_process').exec;
@@ -323,36 +324,44 @@ app.get('/action', function(req, res){
 
 	// stop
 	if (req.param('stop', false)){
+		var stopcmd;
 		if (os.platform() == 'win32'){
-			console.log(exec('TASKKILL /F /IM reacTIVision.exe'));
+			stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
 		} else {
-			console.log(exec('killall -9 reactvision &'));
+			stopcmd = 'killall reacTIVision';
 		}
-		res.end();
+		console.log(stopcmd);
+		exec(stopcmd);
 	}
 
 	// start
 	if (req.param('stop', false)){
-		var rpath = path.basename(nconf.get('reactivisionxml'));
+		var rpath = path.dirname(nconf.get('reactivisionxml'));
+		var startcmd;
 		if (os.platform() == 'win32'){
-			console.log(exec(rpath + '/reacTIVision.exe'));
+			startcmd = rpath + '\reacTIVision.exe';
 		} else {
-			console.log(exec(rpath + '/reactvision &'));
+			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
 		}
-		res.end();
+		console.log(startcmd);
+		exec(startcmd);
 	}
 
 	// restart
 	if (req.param('restart', false)){
-		var rpath = path.basename(nconf.get('reactivisionxml'));
+		var rpath = path.dirname(nconf.get('reactivisionxml'));
+		var stopcmd, startcmd;
 		if (os.platform() == 'win32'){
-			console.log(exec('TASKKILL /F /IM reacTIVision.exe'));
-			console.log(exec(rpath + 'reacTIVision.exe'));
+			stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
+			startcmd = rpath + '\reacTIVision.exe';
 		} else {
-			console.log(exec('killall -9 reactvision &'));
-			console.log(exec(rpath + 'reactvision &'));
+			stopcmd = 'killall reacTIVision';
+			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
 		}
-		res.end();
+		console.log(stopcmd);
+		console.log(startcmd);
+		exec(stopcmd);
+		exec(startcmd);
 	}
 
 	// other possible actions ..
