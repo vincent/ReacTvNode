@@ -331,7 +331,13 @@ app.get('/action', function(req, res){
 			stopcmd = 'killall reacTIVision';
 		}
 		console.log(stopcmd);
-		exec(stopcmd);
+		exec(stopcmd, function (error, stdout, stderr) {
+		    console.log('stdout: ' + stdout);
+		    console.log('stderr: ' + stderr);
+		    if (error !== null) {
+		      console.log('exec error: ' + error);
+		    };
+		});
 	}
 
 	// start
@@ -339,12 +345,18 @@ app.get('/action', function(req, res){
 		var rpath = path.dirname(nconf.get('reactivisionxml'));
 		var startcmd;
 		if (os.platform() == 'win32'){
-			startcmd = 'START ' + rpath + '\\reacTIVision.exe';
+			startcmd = 'START "-" /D "' + rpath + '" /B "' + rpath + '\\reacTIVision.exe"';
 		} else {
 			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
 		}
 		console.log(startcmd);
-		exec(startcmd);
+		exec(startcmd, function (error, stdout, stderr) {
+		    console.log('stdout: ' + stdout);
+		    console.log('stderr: ' + stderr);
+		    if (error !== null) {
+		      console.log('exec error: ' + error);
+		    };
+		});
 	}
 
 	// restart
@@ -353,15 +365,27 @@ app.get('/action', function(req, res){
 		var stopcmd, startcmd;
 		if (os.platform() == 'win32'){
 			stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
-			startcmd = 'START ' + rpath + '\\reacTIVision.exe';
+			startcmd = 'START "-" /D "' + rpath + '" /B "' + rpath + '\\reacTIVision.exe"';
 		} else {
 			stopcmd = 'killall reacTIVision';
 			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
 		}
 		console.log(stopcmd);
 		console.log(startcmd);
-		exec(stopcmd);
-		exec(startcmd);
+		exec(stopcmd, function (error, stdout, stderr) {
+		    console.log('stdout: ' + stdout);
+		    console.log('stderr: ' + stderr);
+		    if (error !== null) {
+		      console.log('exec error: ' + error);
+		    };
+		});
+		exec(startcmd, function (error, stdout, stderr) {
+		    console.log('stdout: ' + stdout);
+		    console.log('stderr: ' + stderr);
+		    if (error !== null) {
+		      console.log('exec error: ' + error);
+		    };
+		});
 	}
 
 	// other possible actions ..
