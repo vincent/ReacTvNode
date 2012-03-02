@@ -25,7 +25,7 @@
 	      <span class="number">{fid.id}</span>
 	      <span style="float:left;margin:5px;" class="types {for i in fid.types}{i} {/for}">
 			{for c in fid.controls}
-	          <div class="btn icon-{c.icon}" reactv-type="{c.icon}">
+	          <div class="btn icon-{c.icon}" reactv-type="{c.icon}" reactv-control="{c.control}">
 	          	<a href="#" rel="tooltip" data-original-title="{c.control}">
 	          	  <i class="icon-{c.icon}"></i>
 	          	</a>

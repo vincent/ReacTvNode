@@ -243,7 +243,6 @@ app.get('/edit', function(req, res){
 		C.set_fiducials = Object.values(set_fiducials);
 		C.all_icons = Object.values(all_icons);
 
-        //console.log("CONTEXT: ", C);
         res.render('edit.html', C);
 	});
 });
@@ -255,6 +254,7 @@ app.get('/action', function(req, res){
 	// toggle a fiducial type
 	if (req.param('toggle_type', false) && req.param('fiducial', false)){
 		var fid_id = req.param('fiducial');
+		var fid_ctrl = req.param('toggle_control');
 		var toggle_type_icon = req.param('toggle_type');
 		var toggle_type = all_types[req.param('toggle_type')];
 		
@@ -274,7 +274,7 @@ app.get('/action', function(req, res){
     				
     				Object.keys(set_fiducials[fid_id].controls).forEach(function(key){
               		  if (set_fiducials[fid_id].controls[key].type == toggle_type){
-                  		set_fiducials[fid_id].controls[key].enabled = false;
+                    		set_fiducials[fid_id].controls[key].enabled = false;
               		  }
               		});
         		}
@@ -285,7 +285,7 @@ app.get('/action', function(req, res){
             		
             		Object.keys(set_fiducials[fid_id].controls).forEach(function(key){
             		  if (set_fiducials[fid_id].controls[key].type == toggle_type){
-            			set_fiducials[fid_id].controls[key] = { enabled: true, control: 9, type: toggle_type };
+            			set_fiducials[fid_id].controls[key] = { enabled: true, control: fid_ctrl, type: toggle_type };
             		  }
             		});
         		}
@@ -324,7 +324,7 @@ app.get('/action', function(req, res){
 	// stop
 	if (req.param('stop', false)){
 		if (os.platform() == 'windows'){
-			console.log(exec('TASKKILL /F /IM reactvision.exe'));
+			console.log(exec('TASKKILL /F /IM reacTIVision.exe'));
 		} else {
 			console.log(exec('killall -9 reactvision &'));
 		}
@@ -335,7 +335,7 @@ app.get('/action', function(req, res){
 	if (req.param('stop', false)){
 		var rpath = path.basename(nconf.get('reactivisionxml'));
 		if (os.platform() == 'windows'){
-			console.log(exec(rpath + '/reactvision.exe'));
+			console.log(exec(rpath + '/reacTIVision.exe'));
 		} else {
 			console.log(exec(rpath + '/reactvision &'));
 		}
@@ -346,8 +346,8 @@ app.get('/action', function(req, res){
 	if (req.param('restart', false)){
 		var rpath = path.basename(nconf.get('reactivisionxml'));
 		if (os.platform() == 'windows'){
-			console.log(exec('TASKKILL /F /IM reactvision.exe'));
-			console.log(exec(rpath + 'reactvision.exe'));
+			console.log(exec('TASKKILL /F /IM reacTIVision.exe'));
+			console.log(exec(rpath + 'reacTIVision.exe'));
 		} else {
 			console.log(exec('killall -9 reactvision &'));
 			console.log(exec(rpath + 'reactvision &'));
