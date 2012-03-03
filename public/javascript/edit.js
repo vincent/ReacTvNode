@@ -10,7 +10,7 @@ $('.thumbnails li .types .btn').click(function(e){
 			set: $('#active_set').val(),
 			fiducial: id,
 			toggle_type: $(this).attr('reactv-type'),
-			toggle_control: prompt('Which MIDI control is it ?', $(this).attr('reactv-control'))
+			toggle_control: $(this).hasClass('enabled') ? 0 : prompt('Which MIDI control is it ?', $(this).attr('reactv-control'))
 		},
 		success: function(){
 			$('<form id="editform" action="/edit" method="get"><input name="set" value="'+active_set+'"/></form>').submit();
