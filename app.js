@@ -38,7 +38,12 @@ if (!Object['exclude']){
 	    value: function(from) {
 	      var newArray = [];
 	      this.forEach(function(key){
-	    	 if (from.indexOf(key) == -1){
+	    	 if (typeof(from)=='function'){
+	    		 if (from(key)){
+	    			 newArray.push(key);
+	    		 }
+	    	 }
+	    	 else if (from.indexOf(key) == -1){
 	    	   newArray.push(key);
 	    	 }
 	      });
@@ -104,7 +109,10 @@ function sets_list_html(sets, active_set){
 function context(req){
 	
 	// user sets
-	var user_sets = fs.readdirSync(nconf.get('sets_directory'));
+	var user_sets = fs.readdirSync(nconf.get('sets_directory'))
+						.exclude(function(file){
+							return file.match(/\.[xXmMlL]*$/);
+						});
 	
 	// active set
 	var active_set = req.param('set', false);
@@ -373,7 +381,6 @@ app.get('/action', function(req, res){
 
 				fs.writeFile(filepath, contents, 'utf8', function(err){
 					restartReacTIVision();
-					res.end();
 				});
 			});
 		}
@@ -400,7 +407,7 @@ app.get('/action', function(req, res){
 	}
 	
 	// no valid action found
-	else res.redirect('/');
+	else res.redirect('/edit?set=' + C.active_set);
 });
 
 /* config */
