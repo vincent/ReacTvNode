@@ -2,6 +2,7 @@ ReacTvNode
 ====================
 
 Configure your ReacTVision fiducials configuration sets with a simple NodeJS powered app.
+Switch between your sets.
 
 Install
 ====================
@@ -10,3 +11,10 @@ Install
  * run the project
  
    node app.js
+   
+Works on
+====================
+ * Linux
+ * MacOSX
+ * Windows
+ 
