@@ -8,5 +8,6 @@ config.json
 ehthumbs.db
 Icon?
 Thumbs.db
+.project
 .pydevproject
 .settings
