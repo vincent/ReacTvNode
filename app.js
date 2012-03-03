@@ -215,6 +215,62 @@ function writeMidiConfigFile(set, set_fiducials, callback){
 	});
 }
 
+/**
+ * start
+ */
+function startReacTIVision(callback){
+	var rpath = path.dirname(nconf.get('reactivisionxml'));
+	var startcmd;
+	if (os.platform() == 'win32'){
+		startcmd = 'START "-" /D "' + rpath + '" /B "' + rpath + '\\reacTIVision.exe"';
+	} else {
+		startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
+	}
+	console.log(startcmd);
+	exec(startcmd, function (error, stdout, stderr) {
+	    console.log('stdout: ' + stdout);
+	    console.log('stderr: ' + stderr);
+	    if (error !== null) {
+	      console.log('exec error: ' + error);
+	    };
+	    callback();
+	});
+}
+
+/**
+ * stop
+ */
+function stopReacTIVision(callback){
+	var stopcmd;
+	if (os.platform() == 'win32'){
+		stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
+	} else {
+		stopcmd = 'killall reacTIVision';
+	}
+	console.log(stopcmd);
+	exec(stopcmd, function (error, stdout, stderr) {
+	    console.log('stdout: ' + stdout);
+	    console.log('stderr: ' + stderr);
+	    if (error !== null) {
+	      console.log('exec error: ' + error);
+	    };
+	    callback();
+	});
+}
+
+/**
+ * restartReacTIVision
+ */
+function restartReacTIVision(){
+	stopReacTIVision(function(){
+		setTimeout(function(){
+			startReacTIVision(function(){
+				console.log('ReacTIVision restarted');
+			});
+		}, 1000);
+	});
+}
+
 /**************************************************************************/
 
 /* index */
@@ -316,6 +372,7 @@ app.get('/action', function(req, res){
 				contents = reacParser.newContents();
 
 				fs.writeFile(filepath, contents, 'utf8', function(err){
+					restartReacTIVision();
 					res.end();
 				});
 			});
@@ -324,69 +381,17 @@ app.get('/action', function(req, res){
 
 	// stop
 	if (req.param('stop', false)){
-		var stopcmd;
-		if (os.platform() == 'win32'){
-			stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
-		} else {
-			stopcmd = 'killall reacTIVision';
-		}
-		console.log(stopcmd);
-		exec(stopcmd, function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    };
-		});
+		stopReacTIVision();
 	}
 
 	// start
 	if (req.param('stop', false)){
-		var rpath = path.dirname(nconf.get('reactivisionxml'));
-		var startcmd;
-		if (os.platform() == 'win32'){
-			startcmd = 'START "-" /D "' + rpath + '" /B "' + rpath + '\\reacTIVision.exe"';
-		} else {
-			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
-		}
-		console.log(startcmd);
-		exec(startcmd, function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    };
-		});
+		startReacTIVision();
 	}
 
 	// restart
 	if (req.param('restart', false)){
-		var rpath = path.dirname(nconf.get('reactivisionxml'));
-		var stopcmd, startcmd;
-		if (os.platform() == 'win32'){
-			stopcmd = 'TASKKILL /F /IM reacTIVision.exe';
-			startcmd = 'START "-" /D "' + rpath + '" /B "' + rpath + '\\reacTIVision.exe"';
-		} else {
-			stopcmd = 'killall reacTIVision';
-			startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
-		}
-		console.log(stopcmd);
-		exec(stopcmd, function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    };
-		    
-			console.log(startcmd);
-			exec(startcmd, function (error, stdout, stderr) {
-			    console.log('stdout: ' + stdout);
-			    console.log('stderr: ' + stderr);
-			    if (error !== null) {
-			      console.log('exec error: ' + error);
-			    };
-			});
-		});
+		restartReacTIVision();
 	}
 
 	// other possible actions ..
@@ -395,7 +400,7 @@ app.get('/action', function(req, res){
 	}
 	
 	// no valid action found
-	res.redirect('/');
+	else res.redirect('/');
 });
 
 /* config */
