@@ -231,8 +231,10 @@ function startReacTIVision(callback){
 	var startcmd;
 	if (os.platform() == 'win32'){
 		startcmd = 'START "-" /D "' + rpath + '" /B "' + rpath + '\\reacTIVision.exe"';
-	} else {
+	} else if (os.platform() == 'darwin') {
 		startcmd = 'open ' + rpath + '/../../../reacTIVision.app';
+	} else {
+		startcmd = rpath + '/reacTIVision';
 	}
 	console.log(startcmd);
 	exec(startcmd, function (error, stdout, stderr) {

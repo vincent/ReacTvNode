@@ -7,6 +7,6 @@ Install
 ====================
  * install NodeJS from here : http://nodejs.org
  * download the project archive
- * run the project with
+ * run the project
  
-node app.js
+   node app.js
